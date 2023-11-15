@@ -16,7 +16,12 @@ public class Contacts {
     //constructor
 
 
-    public Contacts() {
+//    public Contacts() {
+//        this.name = name;
+//        this.phone = phone;
+//    }
+
+    public Contacts(String name, String phone) {
         this.name = name;
         this.phone = phone;
     }
@@ -41,7 +46,7 @@ public class Contacts {
             iox.getMessage();
         }
 
-        Path Files.write(Path , List<String> lines)
+//        Path Files.write(Path , List<String> lines)
 
 //        List<String> contactsList = Arrays.asList("John | 899790000");
 //        Path filepath = Paths.get("data", "contacts.txt");
