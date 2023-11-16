@@ -1,1 +1,3 @@
-[]
+Contact{name='Joe', phone='2103334492'}
+Contact{name='Bob', phone='3212313324'}
+Contact{name='larry', phone='9827417524'}
