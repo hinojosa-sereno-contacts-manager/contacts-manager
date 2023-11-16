@@ -47,7 +47,7 @@ public class Contacts {
 
     public static Contacts searchContact(String name, List<Contacts> contactsList) {
         for (Contacts contact : contactsList) {
-            if (contact.getName().equals(name)) {
+            if (contact.getName().equalsIgnoreCase(name)) {
                 return contact;
             }
         }
@@ -153,7 +153,7 @@ public String toString() {
                     //To get it like what you have (Contact.to string)
                     //new Contact object - assign the values from the input
 
-                    Arrays.asList(getName + " " + getPhone),
+                    Arrays.asList(stringObj),
 
                     StandardOpenOption.APPEND
             );
