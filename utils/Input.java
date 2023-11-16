@@ -35,14 +35,14 @@ public class Input {
         return getInt();
     }
 
-    public int getInt(int min, int max) {
-        int userInt;
-        do {
-            System.out.printf("Enter a number between %d and %d: %n", min, max);
-            userInt = Integer.parseInt(scanner.nextLine());
-//            userInt = scanner.nextInt(); //
-        } while (userInt > max || userInt < min);
-        return userInt;
+    public int getInt(int min, int max, String prompt) {
+        System.out.print(prompt);
+        int anInt = getInt();
+        if(anInt < min || anInt > max) {
+            System.out.printf("Hey! That was not between %d and %d!!%n", min, max);
+            return getInt(min, max, prompt);
+        }
+        return anInt;
     }
 
     public int getInt() {
