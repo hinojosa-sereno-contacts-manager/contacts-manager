@@ -1,3 +1,6 @@
-Contact{name='Joe', phone='2103334492'}
-Contact{name='Bob', phone='3212313324'}
-Contact{name='larry', phone='9827417524'}
+Joe | 2103334492
+
+Bob | 3212313324
+
+larry | 9827417524
+

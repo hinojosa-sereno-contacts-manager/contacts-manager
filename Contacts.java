@@ -55,18 +55,18 @@ public class Contacts {
     }
 
 
-
-    @Override
-    public String toString() {
-        return "Contact{" +
-                "name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
-    }
-//@Override
-//public String toString() {
-//    return name + " | " + phone +'\n';
-//}
+//
+//    @Override
+//    public String toString() {
+//        return "Contact{" +
+//                "name='" + name + '\'' +
+//                ", phone='" + phone + '\'' +
+//                '}';
+//    }
+@Override
+public String toString() {
+    return name + " | " + phone +'\n';
+}
 
 
     public static void main(String[] args) throws IOException {
@@ -142,12 +142,21 @@ public class Contacts {
                 System.out.println(cList.get(i));
             }
 
+            Contacts freshObj = new Contacts(getName, getPhone);
+            String stringObj = freshObj.toString();
+
+//            System.out.println("stringObj = " + stringObj);
+
             Files.write(
                     Paths.get("data", "contacts.txt"),
-                    Arrays.asList(getName, getPhone),
+
+                    //To get it like what you have (Contact.to string)
+                    //new Contact object - assign the values from the input
+
+                    Arrays.asList(getName + " " + getPhone),
+
                     StandardOpenOption.APPEND
             );
-
 
 
         } else if (getNumbOption == 3){
