@@ -11,10 +11,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ContactManager {
-
     private final int CHOICE_EXIT = 5;
 
-//    private ArrayList<String> listOfContacts;
     private Input input = new Input();
 
     Path pathToContactsFile = Paths.get("data/contacts.txt");
@@ -53,7 +51,6 @@ public class ContactManager {
     }
 
     public void start() {
-//        initializer();
 
 
         while(true) {
@@ -64,18 +61,9 @@ public class ContactManager {
             if(choice == CHOICE_EXIT) {
                 break;
             }
-
             doChoice(choice);
-
         }
-
-//        String contactInput = input.getString("> ");
-//        printGitName(gitName);
-
-
     }
-
-
 
 
     private void doChoice(int choice) {
@@ -83,7 +71,7 @@ public class ContactManager {
             case 1 -> viewContacts();
             case 2 -> addContacts();
             case 3 -> searchContact();
-//            case 4 -> printCSV();
+            case 4 -> deleteContact();
             default -> System.out.println("Invalid menu choice: " + choice);
         }
     }
@@ -98,43 +86,23 @@ public class ContactManager {
                 Enter an option (1, 2, 3, 4 or 5):
                 """);
     }
-//    public static Contacts searchContact(String name, List<Contacts> contactsList) {
-//        for (Contacts contact : contactsList) {
-//            if (contact.getName().equals(name)) {
-//                return contact;
-//            }
-//        }
-//        return null;
-//    }
 
 
     private void searchContact(){
-//        SEARCH BY NAME
-            //tested. probably move from main to a test class. Look up a contact by name//
-//        List<String> printList = Files.readAllLines(pathToContactsFile);
-
-
-
-
         Input nameSearch = new Input();
             String getName = nameSearch.getString("Search contact by name: ");
-            Contacts foundContact = searchContact(getName, contactsList);
-            if (foundContact != null) {
-                System.out.println("Found contact: " + foundContact);
-            } else {
-                System.out.println("Contact not found");
+            List<String> contactsList = readFile(pathToContactsFile);
+            for (String contact : contactsList){
+                String name = contact.split("\\|")[0].trim();
+                if (name.equalsIgnoreCase(getName)){
+                    System.out.println(contact);
+                }
             }
-
-
     }
 
 
 
     private void viewContacts(){
-//        System.out.println("view contacts is running");
-//        loadContactsFromFile(pathToContactsFile);
-//        for (Contacts contacts : listOfContacts)
-//            System.out.print(contacts);
         List<String> printList = null;
         try {
             printList = Files.readAllLines(pathToContactsFile);
@@ -157,22 +125,7 @@ public class ContactManager {
         Path contactListPath = Paths.get("data", "contacts.txt");
 
         String together = getName + " | " + getPhone;
-//        List<String> cList = null;
-//        try {
-//            cList = Files.readAllLines(contactListPath);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        for (int i = 0; i < cList.size(); i++) {
-//            System.out.println((i + 1) + ": " + cList.get(i));
-//        }
-//
-//        Files.write(
-//                Paths.get("data", "contacts.txt"),
-//                Arrays.asList(getName, getPhone),
-//                StandardOpenOption.APPEND
-//        );
+
 
         List<String> moreContacts = Arrays.asList(together);
 
@@ -188,53 +141,44 @@ public class ContactManager {
 
     }
 
-
-
-//    private void initializer(){
-//        System.out.println("initializer is running");
-//        String directory = "data";
-//        String filename = "contacts.txt";
-
-        //create a list of contacts
-//        List<Contacts> contactsList = loadContactsFromFile(pathToContactsFile);
-//        contactsList.add(new Contacts("Joe", "2103334492"));
-//        contactsList.add(new Contacts("Bob", "3212313324"));
-//        contactsList.add(new Contacts("larry", "9827417524"));
-//        System.out.println(contactsList);
-
-        //path objects where the information is going to be stored
-//        Path dataDirectory = Paths.get(directory);
-//        Path dataFile = Paths.get(directory, filename);
-//        try {
-//            if (Files.notExists(dataDirectory)) {
-//                Files.createDirectories(dataDirectory);
-//            }
-//            if (!Files.exists(dataFile)) {
-//                Files.createFile(dataFile);
-//            }
-//        } catch (IOException iox) {
-//            iox.getMessage();
-//        }
-
-        //converts list of objects in to a list of string objects
-//        List<String> contactsStrings = contactsList.stream()
-//                .map(Contacts::toString)//applies toString() to each Contacts obj -> String obj
-//                .collect(Collectors.toList());//collects the String objs in a new list
-
-        //Files.write expects data to be written in String form
-//        try {
-//            Files.write(dataFile, contactsStrings, Charset.defaultCharset());
-//        } catch (IOException iox) {
-//            iox.printStackTrace();
-//        }
+//    private void deleteContact(){
+//        Input nameSearch = new Input();
+//        String getName = nameSearch.getString("Delete contact by name: ");
+//        List<String> current = readFile(pathToContactsFile);
+//        String contactDelete = getName;
+//        current.removeIf(newDelete -> newDelete.equals(contactDelete));
+//        writeListToFile(pathToContactsFile, current);
+//        System.out.println("-------------------------");
+//        outputList(current);
+//
 //    }
 
-//    private void viewContacts(){
-//        List<Contacts> contactsList = new ArrayList<>();
-//        for (Contacts contacts : contactsList)
-//            System.out.print(contacts);
+    public void deleteContact(){
+        Input deleteContact = new Input();
+        List<String> currentListOfContacts = readFile(pathToContactsFile);
+        System.out.println("Current list of contacts: " + currentListOfContacts);
 
-//    }
+        String deleteName = deleteContact.getString("Delete contact by name: ");
+
+        // Check if the contact name exists in the list
+        boolean contactExists = currentListOfContacts.stream().anyMatch(contact -> contact.equalsIgnoreCase(deleteName));
+        System.out.println("Contact exists: " + contactExists);
+
+        if (!contactExists) {
+            System.out.println("Contact not found.");
+            return;
+        }
+
+        // Remove the contact from the list
+        currentListOfContacts.removeIf(contact -> contact.equalsIgnoreCase(deleteName));
+        System.out.println("Updated list of contacts: " + currentListOfContacts);
+
+        // Write the updated list back to the file
+        writeListToFile(pathToContactsFile, currentListOfContacts);
+
+        System.out.println("-------------------------");
+        outputList(currentListOfContacts);
+    }
 
     private void startApp(){
 
