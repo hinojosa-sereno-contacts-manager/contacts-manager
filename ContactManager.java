@@ -20,7 +20,7 @@ public class ContactManager {
     public ContactManager() {
     }
 
-    public void writeListToFile(Path pathToFile, List<String> listToWrite){
+    public void writeListToFile(Path pathToFile, List<String> listToWrite) {
         try {
             Files.write(pathToFile, listToWrite);
         } catch (IOException iox) {
@@ -29,22 +29,23 @@ public class ContactManager {
         }
     }
 
-    public List<String> readFile(Path pathToFile){
+    public List<String> readFile(Path pathToFile) {
         List<String> linesInFile = new ArrayList<>();
         try {
             linesInFile = Files.readAllLines(pathToFile);
-        } catch (IOException iox){
+        } catch (IOException iox) {
             iox.printStackTrace();
         }
         return linesInFile;
     }
 
 
-    public void outputList(List<String> list){
-        for (String listItem : list){
+    public void outputList(List<String> list) {
+        for (String listItem : list) {
             System.out.println(listItem);
         }
     }
+
     public static void main(String[] args) {
         ContactManager app = new ContactManager();
         app.start();
@@ -53,12 +54,12 @@ public class ContactManager {
     public void start() {
 
 
-        while(true) {
+        while (true) {
             printMenu();
 
             int choice = input.getInt(1, CHOICE_EXIT, "Make a choice: ");
 
-            if(choice == CHOICE_EXIT) {
+            if (choice == CHOICE_EXIT) {
                 break;
             }
             doChoice(choice);
@@ -88,23 +89,20 @@ public class ContactManager {
     }
 
 
-    private void searchContact(){
+    private void searchContact() {
         Input nameSearch = new Input();
-
         String getName = nameSearch.getString("Search contact by name: ");
         List<String> contactsList = readFile(pathToContactsFile);
-        for (String contact : contactsList){
+        for (String contact : contactsList) {
             String name = contact.split("\\|")[0].trim();
-            if (name.equalsIgnoreCase(getName)){
+            if (name.equalsIgnoreCase(getName)) {
                 System.out.println(contact);
             }
         }
-
     }
 
 
-
-    private void viewContacts(){
+    private void viewContacts() {
         List<String> printList = null;
         try {
             printList = Files.readAllLines(pathToContactsFile);
@@ -117,7 +115,7 @@ public class ContactManager {
         }
     }
 
-    private void addContacts(){
+    private void addContacts() {
         System.out.println("adding new contact");
 
         Input addContact = new Input();
@@ -134,7 +132,7 @@ public class ContactManager {
         // We use Files.write, but with the APPEND option
         try {
             Files.write(contactListPath, moreContacts, StandardOpenOption.APPEND);
-        } catch (IOException iox){
+        } catch (IOException iox) {
             System.out.println("Error writing to file " + iox.getMessage());
         }
 
@@ -155,7 +153,7 @@ public class ContactManager {
 //
 //    }
 
-    public void deleteContact(){
+    public void deleteContact() {
         Input deleteContact = new Input();
         List<String> currentListOfContacts = readFile(pathToContactsFile);
         System.out.println("Current list of contacts: " + currentListOfContacts);
@@ -181,23 +179,5 @@ public class ContactManager {
         System.out.println("-------------------------");
         outputList(currentListOfContacts);
     }
-
-    private void startApp(){
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
