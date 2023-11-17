@@ -90,7 +90,7 @@ public class ContactManager {
 
     private void searchContact(){
         Input nameSearch = new Input();
-<<<<<<< HEAD
+
         String getName = nameSearch.getString("Search contact by name: ");
         List<String> contactsList = readFile(pathToContactsFile);
         for (String contact : contactsList){
@@ -99,16 +99,7 @@ public class ContactManager {
                 System.out.println(contact);
             }
         }
-=======
-            String getName = nameSearch.getString("Search contact by name: ");
-            List<String> contactsList = readFile(pathToContactsFile);
-            for (String contact : contactsList){
-                String name = contact.split("\\|")[0].trim();
-                if (name.equalsIgnoreCase(getName)){
-                    System.out.println(contact);
-                }
-            }
->>>>>>> 3e97e0aba35deb33af1f33150bc6ce277cac769f
+
     }
 
 
@@ -193,9 +184,7 @@ public class ContactManager {
 
     private void startApp(){
 
-<<<<<<< HEAD
-    }
-=======
+
     }
 
 
@@ -212,4 +201,3 @@ public class ContactManager {
 
 
 }
->>>>>>> 3e97e0aba35deb33af1f33150bc6ce277cac769f
