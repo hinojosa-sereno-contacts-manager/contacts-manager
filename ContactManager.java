@@ -17,8 +17,8 @@ public class ContactManager {
 
     Path pathToContactsFile = Paths.get("data/contacts.txt");
 
-    public ContactManager() {
-    }
+//    public ContactManager() {
+//    }
 
     public void writeListToFile(Path pathToFile, List<String> listToWrite) {
         try {
@@ -39,6 +39,29 @@ public class ContactManager {
         return linesInFile;
     }
 
+    public Contact stringToContact(String contactString) {
+        String name = contactString.split("\\|")[0].trim();
+        String number = contactString.split("\\|")[1].trim();
+        Contact contact = new Contact(name, number);
+        return contact;
+    }
+
+    public String contactToString(Contact contact) {
+        return contact.getName() + " | " + contact.getPhone();
+    }
+
+    public List<Contact> loadContactsList(Path pathToContactsFile) {
+        List<Contact> contactsOnFile = new ArrayList<>();
+        try {
+            List<String> contactsList = Files.readAllLines(pathToContactsFile);
+            for (String contactString : contactsList) {
+                contactsOnFile.add(stringToContact(contactString));
+            }
+        } catch (IOException iox) {
+            iox.printStackTrace();
+        }
+        return contactsOnFile;
+    }
 
     public void outputList(List<String> list) {
         for (String listItem : list) {
@@ -69,7 +92,7 @@ public class ContactManager {
 
     private void doChoice(int choice) {
         switch (choice) {
-            case 1 -> viewContacts();
+            case 1 -> viewContactsOOP();
             case 2 -> addContacts();
             case 3 -> searchContact();
             case 4 -> deleteContact();
@@ -101,7 +124,6 @@ public class ContactManager {
         }
     }
 
-
     private void viewContacts() {
         List<String> printList = null;
         try {
@@ -112,6 +134,13 @@ public class ContactManager {
         for (int i = 0; i < printList.size(); i++) {
             System.out.println(printList.get(i));
 
+        }
+    }
+
+    private void viewContactsOOP() {
+        List<Contact> contacts = loadContactsList(pathToContactsFile);
+        for (Contact contact : contacts) {
+            System.out.println(contact.getName() + " | " + contact.getPhone());
         }
     }
 
@@ -141,6 +170,57 @@ public class ContactManager {
 
     }
 
+    private void deleteContact() {
+        Input nameSearch = new Input();
+        String getName = nameSearch.getString("Delete contact by name: ");
+
+        List<Contact> current = loadContactsList(pathToContactsFile);
+        current.removeIf(contact -> contact.getName().equalsIgnoreCase(getName));
+
+        writeListToFile(pathToContactsFile, current.stream()
+                .map(this::contactToString)
+                .collect(Collectors.toList()));
+
+        System.out.println("-------------------------");
+        outputList(current.stream()
+                .map(this::contactToString)
+                .collect(Collectors.toList()));
+    }
+}
+
+//    List<String> contactsList = readFile(pathToContactsFile);
+//        for (String contact : contactsList) {
+//        String name = contact.split("\\|")[0].trim();
+//        if (name.equalsIgnoreCase(getName)) {
+//            System.out.println(contact);
+//        }
+
+//    private void deleteContact() {
+//        Input nameSearch = new Input();
+//        String getName = nameSearch.getString("Delete contact by name: ");
+////        List<String> contactsList = readFile(pathToContactsFile);
+//        Iterator<String> contactsList = readFile(pathToContactsFile).iterator();
+//        String contactDelete = getName;
+//
+////        for (String contact : contactsList) {
+////            String name = contact.split("\\|")[0].trim();
+////            if (name.equalsIgnoreCase(getName)) {
+//                contactsList.removeIf(newDelete -> newDelete.equalsIgnoreCase(getName));
+////                System.out.println("$$$L ";
+//
+//            writeListToFile(pathToContactsFile, contactsList);
+//            System.out.println("-------------------------");
+//            outputList(contactsList);
+//    }
+//public void deleteContact() {
+//    Input nameSearch = new Input();
+//        String getName = nameSearch.getString("Delete contact by name: ");
+//        List<String> contactsList = readFile(pathToContactsFile);
+////        Iterator<String> contactsList = readFile(pathToContactsFile).iterator();
+//        String contactDelete = getName;
+//    contactsList.removeIf(contact -> contact.trim().equalsIgnoreCase(getName.trim()));
+//}
+
 //    private void deleteContact(){
 //        Input nameSearch = new Input();
 //        String getName = nameSearch.getString("Delete contact by name: ");
@@ -150,34 +230,38 @@ public class ContactManager {
 //        writeListToFile(pathToContactsFile, current);
 //        System.out.println("-------------------------");
 //        outputList(current);
-//
 //    }
 
-    public void deleteContact() {
-        Input deleteContact = new Input();
-        List<String> currentListOfContacts = readFile(pathToContactsFile);
-        System.out.println("Current list of contacts: " + currentListOfContacts);
 
-        String deleteName = deleteContact.getString("Delete contact by name: ");
 
-        // Check if the contact name exists in the list
-        boolean contactExists = currentListOfContacts.stream().anyMatch(contact -> contact.equalsIgnoreCase(deleteName));
-        System.out.println("Contact exists: " + contactExists);
 
-        if (!contactExists) {
-            System.out.println("Contact not found.");
-            return;
-        }
+//
+//    public void deleteContact() {
+//        Input deleteContact = new Input();
+//        List<String> currentListOfContacts = readFile(pathToContactsFile);
+//        System.out.println("Current list of contacts: " + currentListOfContacts);
+//
+//        String deleteName = deleteContact.getString("Delete contact by name: ");
+//
+//        // Check if the contact name exists in the list
+//        boolean contactExists = currentListOfContacts.stream().anyMatch(contact -> contact.equalsIgnoreCase(deleteName));
+//        System.out.println("Contact exists: " + contactExists);
+//
+//        if (!contactExists) {
+//            System.out.println("Contact not found.");
+//            return;
+//        }
+//
+//        // Remove the contact from the list
+//        currentListOfContacts.removeIf(contact -> contact.equalsIgnoreCase(deleteName));
+//        System.out.println("Updated list of contacts: " + currentListOfContacts);
+//
+//        // Write the updated list back to the file
+//        writeListToFile(pathToContactsFile, currentListOfContacts);
+//
+//        System.out.println("-------------------------");
+//        outputList(currentListOfContacts);
+//    }
 
-        // Remove the contact from the list
-        currentListOfContacts.removeIf(contact -> contact.equalsIgnoreCase(deleteName));
-        System.out.println("Updated list of contacts: " + currentListOfContacts);
 
-        // Write the updated list back to the file
-        writeListToFile(pathToContactsFile, currentListOfContacts);
 
-        System.out.println("-------------------------");
-        outputList(currentListOfContacts);
-    }
-
-}
