@@ -1,3 +1,4 @@
+import org.w3c.dom.ls.LSOutput;
 import utils.Input;
 
 import java.io.IOException;
@@ -13,8 +14,10 @@ public class ContactManager {
 
     private final int CHOICE_EXIT = 5;
 
-    private ArrayList<String> listOfContacts;
+//    private ArrayList<String> listOfContacts;
     private Input input = new Input();
+
+    Path pathToContactsFile = Paths.get("data/contacts.txt");
 
     public ContactManager() {
     }
@@ -50,7 +53,8 @@ public class ContactManager {
     }
 
     public void start() {
-            initializer();
+//        initializer();
+
 
         while(true) {
             printMenu();
@@ -65,11 +69,11 @@ public class ContactManager {
 
         }
 
-        String contactInput = input.getString("> ");
+//        String contactInput = input.getString("> ");
 //        printGitName(gitName);
 
 
-        }
+    }
 
 
 
@@ -78,7 +82,7 @@ public class ContactManager {
         switch (choice) {
             case 1 -> viewContacts();
             case 2 -> addContacts();
-//            case 3 -> printClassAverage();
+            case 3 -> searchContact();
 //            case 4 -> printCSV();
             default -> System.out.println("Invalid menu choice: " + choice);
         }
@@ -94,19 +98,53 @@ public class ContactManager {
                 Enter an option (1, 2, 3, 4 or 5):
                 """);
     }
-    public static Contacts searchContact(String name, List<Contacts> contactsList) {
-        for (Contacts contact : contactsList) {
-            if (contact.getName().equals(name)) {
-                return contact;
+//    public static Contacts searchContact(String name, List<Contacts> contactsList) {
+//        for (Contacts contact : contactsList) {
+//            if (contact.getName().equals(name)) {
+//                return contact;
+//            }
+//        }
+//        return null;
+//    }
+
+
+    private void searchContact(){
+//        SEARCH BY NAME
+            //tested. probably move from main to a test class. Look up a contact by name//
+//        List<String> printList = Files.readAllLines(pathToContactsFile);
+
+
+
+
+        Input nameSearch = new Input();
+            String getName = nameSearch.getString("Search contact by name: ");
+            Contacts foundContact = searchContact(getName, contactsList);
+            if (foundContact != null) {
+                System.out.println("Found contact: " + foundContact);
+            } else {
+                System.out.println("Contact not found");
             }
-        }
-        return null;
+
+
     }
 
-    private void viewContacts(){
 
-        for (Contacts contacts : listOfContacts)
-            System.out.print(contacts);
+
+    private void viewContacts(){
+//        System.out.println("view contacts is running");
+//        loadContactsFromFile(pathToContactsFile);
+//        for (Contacts contacts : listOfContacts)
+//            System.out.print(contacts);
+        List<String> printList = null;
+        try {
+            printList = Files.readAllLines(pathToContactsFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (int i = 0; i < printList.size(); i++) {
+            System.out.println(printList.get(i));
+
+        }
     }
 
     private void addContacts(){
@@ -117,6 +155,8 @@ public class ContactManager {
         String getPhone = addContact.getString("Add new contact phone number: ");
 
         Path contactListPath = Paths.get("data", "contacts.txt");
+
+        String together = getName + " | " + getPhone;
 //        List<String> cList = null;
 //        try {
 //            cList = Files.readAllLines(contactListPath);
@@ -134,7 +174,7 @@ public class ContactManager {
 //                StandardOpenOption.APPEND
 //        );
 
-        List<String> moreContacts = Arrays.asList(getName, getPhone);
+        List<String> moreContacts = Arrays.asList(together);
 
         // We use Files.write, but with the APPEND option
         try {
@@ -148,42 +188,45 @@ public class ContactManager {
 
     }
 
-    private void initializer(){
-        String directory = "data";
-        String filename = "contacts.txt";
+
+
+//    private void initializer(){
+//        System.out.println("initializer is running");
+//        String directory = "data";
+//        String filename = "contacts.txt";
 
         //create a list of contacts
-        List<Contacts> contactsList = new ArrayList<>();
-        contactsList.add(new Contacts("Joe", "2103334492"));
-        contactsList.add(new Contacts("Bob", "3212313324"));
-        contactsList.add(new Contacts("larry", "9827417524"));
+//        List<Contacts> contactsList = loadContactsFromFile(pathToContactsFile);
+//        contactsList.add(new Contacts("Joe", "2103334492"));
+//        contactsList.add(new Contacts("Bob", "3212313324"));
+//        contactsList.add(new Contacts("larry", "9827417524"));
 //        System.out.println(contactsList);
 
         //path objects where the information is going to be stored
-        Path dataDirectory = Paths.get(directory);
-        Path dataFile = Paths.get(directory, filename);
-        try {
-            if (Files.notExists(dataDirectory)) {
-                Files.createDirectories(dataDirectory);
-            }
-            if (!Files.exists(dataFile)) {
-                Files.createFile(dataFile);
-            }
-        } catch (IOException iox) {
-            iox.getMessage();
-        }
+//        Path dataDirectory = Paths.get(directory);
+//        Path dataFile = Paths.get(directory, filename);
+//        try {
+//            if (Files.notExists(dataDirectory)) {
+//                Files.createDirectories(dataDirectory);
+//            }
+//            if (!Files.exists(dataFile)) {
+//                Files.createFile(dataFile);
+//            }
+//        } catch (IOException iox) {
+//            iox.getMessage();
+//        }
 
         //converts list of objects in to a list of string objects
-        List<String> contactsStrings = contactsList.stream()
-                .map(Contacts::toString)//applies toString() to each Contacts obj -> String obj
-                .collect(Collectors.toList());//collects the String objs in a new list
+//        List<String> contactsStrings = contactsList.stream()
+//                .map(Contacts::toString)//applies toString() to each Contacts obj -> String obj
+//                .collect(Collectors.toList());//collects the String objs in a new list
 
         //Files.write expects data to be written in String form
-        try {
-            Files.write(dataFile, contactsStrings, Charset.defaultCharset());
-        } catch (IOException iox) {
-            iox.printStackTrace();
-        }
+//        try {
+//            Files.write(dataFile, contactsStrings, Charset.defaultCharset());
+//        } catch (IOException iox) {
+//            iox.printStackTrace();
+//        }
 //    }
 
 //    private void viewContacts(){
@@ -191,7 +234,7 @@ public class ContactManager {
 //        for (Contacts contacts : contactsList)
 //            System.out.print(contacts);
 
-    }
+//    }
 
     private void startApp(){
 
