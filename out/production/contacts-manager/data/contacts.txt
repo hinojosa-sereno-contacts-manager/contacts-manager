@@ -3,4 +3,8 @@ Moe | 9911221423
 barry | 23123124124
 alma | 8323432432
 lama | 8320333
+<<<<<<< HEAD
 javier | 2348976
+=======
+javier | 2348976
+>>>>>>> 3e97e0aba35deb33af1f33150bc6ce277cac769f
